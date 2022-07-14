@@ -6,6 +6,7 @@
 class Event
 {
 public:
+    typedef Event*(*getMessageId)(void);
     virtual ~Event() = default;
 
     virtual std::uint32_t getMessageId() const = 0;
