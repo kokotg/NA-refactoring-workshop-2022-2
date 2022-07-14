@@ -212,25 +212,29 @@ Controller::Segment Controller::getNewHead() const
 
     return newHead;
 }
-
+template<typename T>
+T ourDynamicCaster(std::unique_ptr<Event>& e)
+{
+    return *static_cast<EventT<T> const &>(*e);
+}
 void Controller::receive(std::unique_ptr<Event> e)
 {
-    try {
-        handleTimePassed(*dynamic_cast<EventT<TimeoutInd> const&>(*e));
-    } catch (std::bad_cast&) {
-        try {
-            handleDirectionChange(*dynamic_cast<EventT<DirectionInd> const&>(*e));
-        } catch (std::bad_cast&) {
-            try {
-                handleFoodPositionChange(*dynamic_cast<EventT<FoodInd> const&>(*e));
-            } catch (std::bad_cast&) {
-                try {
-                    handleNewFood(*dynamic_cast<EventT<FoodResp> const&>(*e));
-                } catch (std::bad_cast&) {
-                    throw UnexpectedEventException();
-                }
-            }
-        }
+    switch(e->getMessageId())
+    {
+        case 0x20:
+            handleTimePassed(ourDynamicCaster<TimeoutInd>(e));
+        break;
+        case 0x10:
+            handleDirectionChange(ourDynamicCaster<DirectionInd>(e));
+        break;
+        case 0x40:
+            handleFoodPositionChange(ourDynamicCaster<FoodInd>(e));
+        break;
+        case 0x42:
+            handleNewFood(ourDynamicCaster<FoodResp>(e));
+        break;
+        default:
+            throw UnexpectedEventException();
     }
 }
 
