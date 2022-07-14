@@ -231,5 +231,5 @@ void Controller::receive(std::unique_ptr<Event> e)
         default:
                 throw UnexpectedEventException();
 }
-
+}
 } // namespace Snake
