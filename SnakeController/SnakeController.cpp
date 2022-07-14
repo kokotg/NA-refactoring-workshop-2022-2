@@ -221,16 +221,16 @@ void Controller::receive(std::unique_ptr<Event> e)
 {
     switch(e->getMessageId())
     {
-        case 0x20:
+        case TimeoutInd::MESSAGE_ID:
             handleTimePassed(ourDynamicCaster<TimeoutInd>(e));
         break;
-        case 0x10:
+        case DirectionInd::MESSAGE_ID:
             handleDirectionChange(ourDynamicCaster<DirectionInd>(e));
         break;
-        case 0x40:
+        case FoodInd::MESSAGE_ID:
             handleFoodPositionChange(ourDynamicCaster<FoodInd>(e));
         break;
-        case 0x42:
+        case FoodResp::MESSAGE_ID:
             handleNewFood(ourDynamicCaster<FoodResp>(e));
         break;
         default:
