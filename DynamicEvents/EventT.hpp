@@ -22,7 +22,7 @@ public:
     EventT(EventT<T> const&) = delete;
     EventT& operator=(EventT<T> const&) = delete;
 
-    std::uint32_t getMessageId() const override { return T::MESSAGE_ID; };
+    static std::uint32_t getMessageId() const override { return T::MESSAGE_ID; };
     std::unique_ptr<Event> clone() const override { return std::make_unique<EventT<T>>(*m_payload); }
 
     T * const operator->() noexcept { return m_payload.get(); }
